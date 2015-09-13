@@ -7,8 +7,9 @@
 void randomize_array(int arr[], int len);
 void sort_array(int arr[], int len);
 void print_array(int arr[], int len);
+void delay_1_sec();
 
-int main (int argc, string argv[])
+int main(int argc, string argv[])
 {   
     int data_len = atoi(argv[1]);
     int data[data_len]; 
@@ -53,17 +54,48 @@ void print_array(int arr[], int len)
     {
         printf("%i", arr[i]);
         if (i < len - 1)
-            {
-                printf(",");
-            }
+        {
+            printf(",");
+        }
     }
     printf("]\n");
+}
+
+/*
+ * Delay for one second
+ */
+void delay_1_sec()
+{
+    // delay test
+    int wake = time(0) + 1;
+    while (time(0) < wake)
+    {
+    }
 }
 
 /*
  * Sort the array
  */
 void sort_array(int arr[], int len)
-{
+{ 
     printf("sort array! \n");
+    
+    int loop_max = len;
+    
+    // optimize loop to get smaller each time
+    for (int i = loop_max; i > 0; i--)
+    {
+        delay_1_sec();
+        printf("sort from 0 to %i \n", i);
+        // compare each pair
+        for (int j = 0; j < i; j++)
+        {
+            delay_1_sec();
+            printf("    compare [%i] and [%i] \n", j, j + 1); 
+
+
+            
+           
+        }
+    }
 }
