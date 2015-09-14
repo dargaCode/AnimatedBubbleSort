@@ -6,7 +6,7 @@
 // prototypes
 void fill_array(int arr[], int len);
 void sort_array(int arr[], int len);
-void print_data(int arr[], int len, int active);
+void print_data(int arr[], int len, int active, int done);
 void delay_1_sec();
 
 // printf ANSI colors
@@ -59,7 +59,7 @@ void fill_array(int arr[], int len)
 /*
  * Print out all the elements in the array
  */
-void print_data(int arr[], int len, int active)
+void print_data(int arr[], int len, int active, int done)
 {
     // loop one higher than normal, to add ) after last
     for (int i = 0; i <= len; i++)
@@ -68,7 +68,7 @@ void print_data(int arr[], int len, int active)
         printf(COLOR_GREEN);
         switch (relative_pos)
         {
-            
+            // highlight the current values being compared
             case 0:
                 printf(COLOR_CYAN);
                 printf("(");
@@ -88,7 +88,6 @@ void print_data(int arr[], int len, int active)
                     printf("<");
                     printf(COLOR_RESET);
                 }
-
                 else
                 {
                     printf(COLOR_GREEN);
@@ -109,7 +108,14 @@ void print_data(int arr[], int len, int active)
         // leave off the last number
         if (i < len)
         {
+            // green for values guaranteed done
+            if (i >= len - done)
+            {
+                printf(COLOR_GREEN);
+            }
+            // actually print the current value
             printf("%i", arr[i]);
+            printf(COLOR_RESET);
         }
     }
 }
@@ -132,7 +138,7 @@ void delay_1_sec()
 void sort_array(int arr[], int len)
 {   
     delay_1_sec();
-    print_data(arr, len, -10);
+    print_data(arr, len, -10, 0);
     printf(COLOR_GREEN);
     printf(" START! \n");
     printf(COLOR_RESET);
@@ -147,7 +153,8 @@ void sort_array(int arr[], int len)
         {
             string status = "";
             delay_1_sec(); 
-            print_data(arr, len, j);
+            int confirmed = len - 1 - i;
+            print_data(arr, len, j, confirmed);
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
             {
@@ -167,7 +174,7 @@ void sort_array(int arr[], int len)
         }  
     }
     delay_1_sec();
-    print_data(arr, len, -10);
+    print_data(arr, len, -10, len);
     printf(COLOR_GREEN);
     printf(" DONE! \n");
     printf(COLOR_RESET);
