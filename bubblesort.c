@@ -39,8 +39,8 @@ void fill_array(int arr[], int len)
     
     for (int i = 0; i < len; i++)
     {
-        //arr[i] = rand() % len;
-        arr[i] = len - i;        
+        arr[i] = rand() % (len * 4); // randomized
+        // arr[i] = len - i; // reverse order        
     }
 }
 
@@ -58,7 +58,7 @@ void print_array(int arr[], int len)
             printf(",");
         }
     }
-    printf("]\n");
+    printf("]");
 }
 
 /*
@@ -67,7 +67,7 @@ void print_array(int arr[], int len)
 void delay_1_sec()
 {
     // delay test
-    int wake = time(0) + 1;
+    int wake = time(0) + 0;
     while (time(0) < wake)
     {
     }
@@ -78,29 +78,32 @@ void delay_1_sec()
  */
 void sort_array(int arr[], int len)
 {   
-    print_array(arr, len);
     delay_1_sec();
-
-    int loop_max = len;
+    print_array(arr, len);
+    printf("\n\n");
     
     // optimize loop to get smaller each time
-    for (int i = loop_max - 1; i >= 0; i--)
-    {
-        //printf("sort from 0 to %i \n", i);
-        
+    for (int i = len - 1; i >= 0; i--)
+    {        
         // compare each pair
         for (int j = 0; j < i; j++)
         {
+            //printf("compare [%i] and [%i] \n", j, j + 1);
+            string status = "";
             delay_1_sec(); 
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
             {
+                status = " - swap!";
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
             print_array(arr, len);
-           
+            printf("%s \n", status);
         }
     }
+    delay_1_sec();
+    printf("DONE! \n");
+    delay_1_sec();
 }
