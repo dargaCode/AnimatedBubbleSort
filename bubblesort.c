@@ -9,6 +9,15 @@ void sort_array(int arr[], int len);
 void print_data(int arr[], int len, int active);
 void delay_1_sec();
 
+// printf ANSI colors
+#define COLOR_RED     "\x1b[31m"
+#define COLOR_GREEN   "\x1b[32m"
+#define COLOR_YELLOW  "\x1b[33m"
+#define COLOR_BLUE    "\x1b[34m"
+#define COLOR_MAGENTA "\x1b[35m"
+#define COLOR_CYAN    "\x1b[36m"
+#define COLOR_RESET   "\x1b[0m"
+
 int main(int argc, string argv[])
 {   
     int data_len = atoi(argv[1]);
@@ -16,8 +25,10 @@ int main(int argc, string argv[])
     
     // only accepts one argument, a positive int
     if (argc != 2 || data_len < 1)
-    {
-        printf("Usage: bubblesort <array length int>\n");
+    {   
+        printf(COLOR_RED);
+        printf("Usage: ./bubblesort <array length int>\n");
+        printf(COLOR_RESET);
         // failure
         return 1;
     }
@@ -54,33 +65,47 @@ void print_data(int arr[], int len, int active)
     for (int i = 0; i <= len; i++)
     {
         int relative_pos = i - active;
+        printf(COLOR_GREEN);
         switch (relative_pos)
         {
+            
             case 0:
+                printf(COLOR_CYAN);
                 printf("(");
+                printf(COLOR_YELLOW);
                 break;
             case 1:
                 // show the comparison
-                if (arr[active] < arr[active + 1])
+                if (arr[active] > arr[active + 1])
                 {
-                    printf("<");
-                }
-                else if (arr[active] > arr[active + 1])
-                {
+                    printf(COLOR_RED);
                     printf(">");
+                    printf(COLOR_RESET);
                 }
+                else if (arr[active] < arr[active + 1])
+                {
+                    printf(COLOR_GREEN);
+                    printf("<");
+                    printf(COLOR_RESET);
+                }
+
                 else
                 {
+                    printf(COLOR_GREEN);
                     printf("=");
+                    printf(COLOR_RESET);
                 }
                 break;
             case 2:
+                printf(COLOR_CYAN);
                 printf(")");
+                printf(COLOR_RESET);
                 break;
             default:
                 printf(" ");
                 break;
         }
+        printf(COLOR_RESET);
         // leave off the last number
         if (i < len)
         {
@@ -108,7 +133,9 @@ void sort_array(int arr[], int len)
 {   
     delay_1_sec();
     print_data(arr, len, -10);
-    printf("- START! \n");
+    printf(COLOR_GREEN);
+    printf(" START! \n");
+    printf(COLOR_RESET);
     delay_1_sec();
     printf("\n");
     
@@ -124,13 +151,14 @@ void sort_array(int arr[], int len)
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
             {
-                status = "- SWAP!";
+                status = " SWAP!";
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
-
+            printf(COLOR_RED);
             printf("%s \n", status);
+            printf(COLOR_RESET);
         }
         if (i > 0)
         {
@@ -140,6 +168,8 @@ void sort_array(int arr[], int len)
     }
     delay_1_sec();
     print_data(arr, len, -10);
-    printf("- DONE! \n");
+    printf(COLOR_GREEN);
+    printf(" DONE! \n");
+    printf(COLOR_RESET);
     delay_1_sec();
 }
