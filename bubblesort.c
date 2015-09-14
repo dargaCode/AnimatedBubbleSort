@@ -4,7 +4,7 @@
 #include <time.h>
 
 // prototypes
-void randomize_array(int arr[], int len);
+void fill_array(int arr[], int len);
 void sort_array(int arr[], int len);
 void print_array(int arr[], int len);
 void delay_1_sec();
@@ -22,8 +22,7 @@ int main(int argc, string argv[])
         return 1;
     }
     
-    randomize_array(data, data_len);
-    print_array(data, data_len);
+    fill_array(data, data_len);
     sort_array(data, data_len);
     
     // success
@@ -33,14 +32,15 @@ int main(int argc, string argv[])
 /*
  * Fill the array with random ints 
  */ 
-void randomize_array(int arr[], int len)
+void fill_array(int arr[], int len)
 {
     // random seed
     srand(time(NULL));   
     
     for (int i = 0; i < len; i++)
     {
-        arr[i] = rand() % len;        
+        //arr[i] = rand() % len;
+        arr[i] = len - i;        
     }
 }
 
@@ -77,24 +77,29 @@ void delay_1_sec()
  * Sort the array
  */
 void sort_array(int arr[], int len)
-{ 
-    printf("sort array! \n");
-    
+{   
+    print_array(arr, len);
+    delay_1_sec();
+
     int loop_max = len;
     
     // optimize loop to get smaller each time
-    for (int i = loop_max; i > 0; i--)
+    for (int i = loop_max - 1; i >= 0; i--)
     {
-        delay_1_sec();
-        printf("sort from 0 to %i \n", i);
+        //printf("sort from 0 to %i \n", i);
+        
         // compare each pair
         for (int j = 0; j < i; j++)
         {
-            delay_1_sec();
-            printf("    compare [%i] and [%i] \n", j, j + 1); 
-
-
-            
+            delay_1_sec(); 
+            // compare each number and swap if neccesary
+            if (arr[j + 1] < arr[j])
+            {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+            print_array(arr, len);
            
         }
     }
