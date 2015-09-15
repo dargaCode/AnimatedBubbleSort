@@ -61,6 +61,10 @@ void fill_array(int arr[], int len)
  */
 void print_data(int arr[], int len, int active, int done)
 {
+    // backspace test
+    printf("\r\r\r");
+    fflush(stdout);
+    
     // loop one higher than normal, to add ) after last
     for (int i = 0; i <= len; i++)
     {
@@ -137,13 +141,7 @@ void delay_1_sec()
  */
 void sort_array(int arr[], int len)
 {   
-    delay_1_sec();
     print_data(arr, len, -10, 0);
-    printf(COLOR_GREEN);
-    printf(" START! \n");
-    printf(COLOR_RESET);
-    delay_1_sec();
-    printf("\n");
     
     // optimize loop to get smaller each time
     for (int i = len - 1; i >= 0; i--)
@@ -151,32 +149,26 @@ void sort_array(int arr[], int len)
         // compare each pair
         for (int j = 0; j < i; j++)
         {
-            string status = "";
             delay_1_sec(); 
             int confirmed = len - 1 - i;
             print_data(arr, len, j, confirmed);
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
             {
-                status = " SWAP!";
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
+                
+                // show the swapped results
+                delay_1_sec();
+                print_data(arr, len, j, confirmed);
             }
-            printf(COLOR_RED);
-            printf("%s \n", status);
-            printf(COLOR_RESET);
-        }
-        if (i > 0)
-        {
-            delay_1_sec();
-            printf("\n");
-        }  
+         }
     }
     delay_1_sec();
-    print_data(arr, len, -10, len);
-    printf(COLOR_GREEN);
-    printf(" DONE! \n");
-    printf(COLOR_RESET);
+    print_data(arr, len, -10, 0);
     delay_1_sec();
+    printf(COLOR_GREEN);
+    printf("\n DONE! \n");
+    printf(COLOR_RESET);
 }
