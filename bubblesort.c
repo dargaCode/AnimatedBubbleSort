@@ -7,7 +7,7 @@
 void fill_array(int arr[], int len);
 void sort_array(int arr[], int len);
 void print_data(int arr[], int len, int active, int done);
-void delay_1_sec();
+void delay(int milliseconds);
 
 // printf ANSI colors
 #define COLOR_RED     "\x1b[31m"
@@ -61,8 +61,8 @@ void fill_array(int arr[], int len)
  */
 void print_data(int arr[], int len, int active, int done)
 {
-    // backspace test
-    printf("\r\r\r");
+    // clear line
+    printf("\r");
     fflush(stdout);
     
     // loop one higher than normal, to add ) after last
@@ -122,17 +122,21 @@ void print_data(int arr[], int len, int active, int done)
             printf(COLOR_RESET);
         }
     }
+    //printf("\n");
 }
 
 /*
- * Delay for one second
+ * Delay for a given amount of milliseconds
  */
-void delay_1_sec()
+void delay(int milliseconds)
 {
-    // delay test
-    int wake = time(0) + 1;
-    while (time(0) < wake)
+    clock_t start = clock();
+    clock_t now = clock();
+    long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
+        
+    while (now < start + delay)
     {
+        now = clock();
     }
 }
 
@@ -141,16 +145,25 @@ void delay_1_sec()
  */
 void sort_array(int arr[], int len)
 {   
-    print_data(arr, len, -10, 0);
+    print_data(arr, len, -10, 0);    
     
     // optimize loop to get smaller each time
-    for (int i = len - 1; i >= 0; i--)
+    for (int i = len - 1; i >0; i--)
     {      
+        // items that must be correct
+        int confirmed = len - 1 - i;
+        
+        if (i < len - 1)
+        {
+            print_data(arr, len, -10, confirmed);
+            delay(750);    
+        }  
+                
         // compare each pair
         for (int j = 0; j < i; j++)
         {
-            delay_1_sec(); 
-            int confirmed = len - 1 - i;
+            delay(500); 
+            
             print_data(arr, len, j, confirmed);
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
@@ -160,15 +173,19 @@ void sort_array(int arr[], int len)
                 arr[j + 1] = temp;
                 
                 // show the swapped results
-                delay_1_sec();
+                if (j < i -1)
+                {
+                    delay(500);
+                }
                 print_data(arr, len, j, confirmed);
             }
-         }
+        }
+        delay(500);
     }
-    delay_1_sec();
+    delay(500);
     print_data(arr, len, -10, 0);
-    delay_1_sec();
+    delay(500);
     printf(COLOR_GREEN);
-    printf("\n DONE! \n");
+    printf("DONE! \n");
     printf(COLOR_RESET);
 }
