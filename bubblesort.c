@@ -89,26 +89,22 @@ void sort_array(int arr[], int len)
 {   
     print_data(arr, len, -10, 0);    
     
-    for (int i = 0; i < len; i++)
+    // main passes through the array
+    for (int i = 0; i < len - 1; i++)
     {      
-        // items that must be correct
+        // items that must be correct this pass
         int confirmed = i;
         
-        if (i < len - 1)
-        {
-            print_data(arr, len, -10, confirmed);
-            delay(750);    
-        }  
+        print_data(arr, len, -10, confirmed);
         
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
         
-        // compare each pair
+        // compare each unconfirmed pair
         for (int j = 0; j < max; j++)
         {
-            delay(500); 
-            
             print_data(arr, len, j, confirmed);
+
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
             {
@@ -117,16 +113,10 @@ void sort_array(int arr[], int len)
                 arr[j + 1] = temp;
                 
                 // show the swapped results
-                if (j < i -1)
-                {
-                    delay(500);
-                }
                 print_data(arr, len, j, confirmed);
             }
         }
-        delay(500);
     }
-    delay(500);
     print_data(arr, len, -10, 0);
     printf(COLOR_GREEN);
     printf(" DONE! \n");
