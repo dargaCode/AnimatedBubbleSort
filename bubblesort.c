@@ -4,6 +4,7 @@
 #include <time.h>
 
 // prototypes
+bool validate(int argc, string argv[]);
 void fill_array(int arr[], int len);
 void sort_array(int arr[], int len);
 void print_data(int arr[], int len, int active, int done);
@@ -19,25 +20,49 @@ void delay(int milliseconds);
 #define COLOR_RESET   "\x1b[0m"
 
 int main(int argc, string argv[])
-{   
-    int data_len = atoi(argv[1]);
-    int data[data_len]; 
-    
-    // only accepts one argument, a positive int
-    if (argc != 2 || data_len < 1)
-    {   
-        printf(COLOR_RED);
-        printf("Usage: ./bubblesort <array length int>\n");
-        printf(COLOR_RESET);
-        // failure
+{       
+    // failure
+    if (validate(argc, argv) == false)
+    {
         return 1;
     }
-    
+
+    // create array
+    int data_len = atoi(argv[1]);
+    int data[data_len]; 
+        
     fill_array(data, data_len);
     sort_array(data, data_len);
     
     // success
     return 0;
+}
+
+/*
+ * Validate the inputs to the file and return validity
+ */
+bool validate(int argc, string argv[])
+{
+    bool valid = true;
+
+    // accept exactly one argument
+    if (argc != 2)
+    {
+        valid = false;
+    }
+    // argument must be positive int
+    else if (atoi(argv[1]) < 1)
+    {
+        valid = false;
+    }
+    
+    if (valid == false)
+    {
+        printf(COLOR_RED);
+        printf("Usage: bubblesort <array length>\n");
+        printf(COLOR_RESET);
+    }
+    return valid;
 }
 
 /*
