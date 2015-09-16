@@ -51,9 +51,9 @@ bool validate(int argc, string argv[])
         valid = false;
     }
     
-    int length = atoi(argv[1]);
+    int len = atoi(argv[1]);
     // argument must be positive int up to 200
-    if (length < 1 || length > 200)
+    if (len < 1 || len > 200)
     {
         valid = false;
     }
@@ -77,9 +77,75 @@ void fill_array(int arr[], int len)
     
     for (int i = 0; i < len; i++)
     {
-        arr[i] = rand() % (len * 4); // randomized  
-        //todo change 4 to 1
-        // arr[i] = len - i; // reverse order        
+        // len * 5 reduces duplicate numbers
+        arr[i] = rand() % (len * 5);      
+    }
+}
+
+/*
+ * Sort the array
+ */
+void sort_array(int arr[], int len)
+{   
+    print_data(arr, len, -10, 0);    
+    
+    // optimize loop to get smaller each time
+    for (int i = len - 1; i >0; i--)
+    {      
+        // items that must be correct
+        int confirmed = len - 1 - i;
+        
+        if (i < len - 1)
+        {
+            print_data(arr, len, -10, confirmed);
+            delay(750);    
+        }  
+                
+        // compare each pair
+        for (int j = 0; j < i; j++)
+        {
+            delay(500); 
+            
+            print_data(arr, len, j, confirmed);
+            // compare each number and swap if neccesary
+            if (arr[j + 1] < arr[j])
+            {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                
+                // show the swapped results
+                if (j < i -1)
+                {
+                    delay(500);
+                }
+                print_data(arr, len, j, confirmed);
+            }
+        }
+        delay(500);
+    }
+    delay(500);
+    print_data(arr, len, -10, 0);
+    delay(500);
+    printf(COLOR_GREEN);
+    printf("DONE! \n");
+    printf(COLOR_RESET);
+}
+
+/*
+ * Delay for a given amount of milliseconds
+ */
+void delay(int milliseconds)
+{
+    // type "clock_t" is ticks
+    clock_t start = clock();
+    clock_t now = clock();
+    long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
+        
+    while (now < start + delay)
+    {
+        // update the current time
+        now = clock();
     }
 }
 
@@ -152,67 +218,6 @@ void print_data(int arr[], int len, int active, int done)
     //printf("\n");
 }
 
-/*
- * Delay for a given amount of milliseconds
- */
-void delay(int milliseconds)
-{
-    clock_t start = clock();
-    clock_t now = clock();
-    long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
-        
-    while (now < start + delay)
-    {
-        now = clock();
-    }
-}
 
-/*
- * Sort the array
- */
-void sort_array(int arr[], int len)
-{   
-    print_data(arr, len, -10, 0);    
-    
-    // optimize loop to get smaller each time
-    for (int i = len - 1; i >0; i--)
-    {      
-        // items that must be correct
-        int confirmed = len - 1 - i;
-        
-        if (i < len - 1)
-        {
-            print_data(arr, len, -10, confirmed);
-            delay(750);    
-        }  
-                
-        // compare each pair
-        for (int j = 0; j < i; j++)
-        {
-            delay(500); 
-            
-            print_data(arr, len, j, confirmed);
-            // compare each number and swap if neccesary
-            if (arr[j + 1] < arr[j])
-            {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-                
-                // show the swapped results
-                if (j < i -1)
-                {
-                    delay(500);
-                }
-                print_data(arr, len, j, confirmed);
-            }
-        }
-        delay(500);
-    }
-    delay(500);
-    print_data(arr, len, -10, 0);
-    delay(500);
-    printf(COLOR_GREEN);
-    printf("DONE! \n");
-    printf(COLOR_RESET);
-}
+
+
