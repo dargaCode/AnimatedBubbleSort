@@ -50,8 +50,10 @@ bool validate(int argc, string argv[])
     {
         valid = false;
     }
-    // argument must be positive int
-    else if (atoi(argv[1]) < 1)
+    
+    int length = atoi(argv[1]);
+    // argument must be positive int up to 200
+    if (length < 1 || length > 200)
     {
         valid = false;
     }
@@ -59,7 +61,7 @@ bool validate(int argc, string argv[])
     if (valid == false)
     {
         printf(COLOR_RED);
-        printf("Usage: bubblesort <array length>\n");
+        printf("Usage: bubblesort <array length 1 - 200>\n");
         printf(COLOR_RESET);
     }
     return valid;
@@ -70,7 +72,7 @@ bool validate(int argc, string argv[])
  */ 
 void fill_array(int arr[], int len)
 {
-    // random seed
+    // random seed based on current time
     srand(time(NULL));   
     
     for (int i = 0; i < len; i++)
