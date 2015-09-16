@@ -7,7 +7,7 @@
 bool validate(int argc, string argv[]);
 void fill_array(int arr[], int len);
 void sort_array(int arr[], int len);
-void print_data(int arr[], int len, int active, int done);
+void print_data(int arr[], int len, int active, int done, int pauses);
 void delay(int milliseconds);
 
 // printf ANSI colors
@@ -18,6 +18,9 @@ void delay(int milliseconds);
 #define COLOR_MAGENTA "\x1b[35m"
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RESET   "\x1b[0m"
+
+// constant
+#define PAUSE_DUR 500
 
 int main(int argc, string argv[])
 {       
@@ -87,7 +90,8 @@ void fill_array(int arr[], int len)
  */
 void sort_array(int arr[], int len)
 {   
-    print_data(arr, len, -10, 0);    
+    //draw the unsorted values
+    print_data(arr, len, -10, 0, 1);    
     
     // main passes through the array
     for (int i = 0; i < len - 1; i++)
@@ -95,7 +99,8 @@ void sort_array(int arr[], int len)
         // items that must be correct this pass
         int confirmed = i;
         
-        print_data(arr, len, -10, confirmed);
+        //draw the results of the previous pass
+        print_data(arr, len, -10, confirmed, 4);
         
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
@@ -103,7 +108,8 @@ void sort_array(int arr[], int len)
         // compare each unconfirmed pair
         for (int j = 0; j < max; j++)
         {
-            print_data(arr, len, j, confirmed);
+            // draw the numbers being compared
+            print_data(arr, len, j, confirmed, 1);
 
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
@@ -112,14 +118,16 @@ void sort_array(int arr[], int len)
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
                 
-                // show the swapped results
-                print_data(arr, len, j, confirmed);
             }
+            // draw the comparison results (swapped or not)
+            print_data(arr, len, j, confirmed, 1);
+            
         }
     }
-    print_data(arr, len, -10, 0);
+    // draw the final results
+    print_data(arr, len, -10, 0, 1);
     printf(COLOR_GREEN);
-    printf(" DONE! \n");
+    printf("\n DONE! \n");
     printf(COLOR_RESET);
 }
 
@@ -132,7 +140,8 @@ void delay(int milliseconds)
     clock_t start = clock();
     clock_t now = clock();
     long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
-        
+    
+    // still waiting
     while (now < start + delay)
     {
         // update the current time
@@ -143,7 +152,7 @@ void delay(int milliseconds)
 /*
  * Print out all the elements in the array
  */
-void print_data(int arr[], int len, int active, int done)
+void print_data(int arr[], int len, int active, int done, int pauses)
 {
     // clear line
     //printf("\r");
@@ -163,7 +172,7 @@ void print_data(int arr[], int len, int active, int done)
                 printf(COLOR_YELLOW);
                 break;
             case 1:
-                // show the comparison
+                // draw the comparison
                 if (arr[active] > arr[active + 1])
                 {
                     printf(COLOR_RED);
@@ -207,8 +216,5 @@ void print_data(int arr[], int len, int active, int done)
         }
     }
     printf("\n");
+    delay(PAUSE_DUR * pauses);
 }
-
-
-
-
