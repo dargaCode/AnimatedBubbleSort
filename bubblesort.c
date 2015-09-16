@@ -2,12 +2,13 @@
 #include <stdio.h>
 #include <cs50.h>
 #include <time.h>
+#include <string.h>
 
 // prototypes
 bool validate(int argc, string argv[]);
 void fill_array(int arr[], int len);
 void sort_array(int arr[], int len);
-void print_data(int arr[], int len, int active, int done, int pauses);
+void print_data(int arr[], int len, int active, int done, string status, int pauses);
 void delay(int milliseconds);
 
 // printf ANSI colors
@@ -20,7 +21,7 @@ void delay(int milliseconds);
 #define COLOR_RESET   "\x1b[0m"
 
 // constant
-#define PAUSE_DUR 400
+#define PAUSE_DUR 500
 
 int main(int argc, string argv[])
 {       
@@ -91,7 +92,7 @@ void fill_array(int arr[], int len)
 void sort_array(int arr[], int len)
 {   
     //draw the unsorted values
-    print_data(arr, len, -10, 0, 1);    
+    print_data(arr, len, -10, 0, "BEGIN", 1);    
     
     // main passes through the array
     for (int i = 0; i < len - 1; i++)
@@ -100,7 +101,7 @@ void sort_array(int arr[], int len)
         int confirmed = i;
         
         //draw the results of the previous pass
-        print_data(arr, len, -10, confirmed, 2);
+        print_data(arr, len, -10, confirmed, "", 2);
                         
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
@@ -109,7 +110,7 @@ void sort_array(int arr[], int len)
         for (int j = 0; j < max; j++)
         {
             // draw the numbers being compared
-            print_data(arr, len, j, confirmed, 1);
+            print_data(arr, len, j, confirmed, "", 1);
 
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
@@ -118,17 +119,18 @@ void sort_array(int arr[], int len)
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
                 
+                // draw the swapped results
+                print_data(arr, len, j, confirmed, "SWAP!",1);
             }
-            // draw the comparison results (swapped or not)
-            print_data(arr, len, j, confirmed, 1);
-            
+            else
+            {
+                // draw the unswapped results
+                print_data(arr, len, j, confirmed, "OK!", 1);
+            }
         }
     }
     // draw the final results
-    print_data(arr, len, -10, 0, 1);
-    printf(COLOR_GREEN);
-    printf("DONE! \n\n");
-    printf(COLOR_RESET);
+    print_data(arr, len, -10, 0, "DONE", 1);
 }
 
 /*
@@ -152,7 +154,7 @@ void delay(int milliseconds)
 /*
  * Print out all the elements in the array
  */
-void print_data(int arr[], int len, int active, int done, int pauses)
+void print_data(int arr[], int len, int active, int done, string status, int pauses)
 {
     // empty the screen
     system("clear");
@@ -214,6 +216,18 @@ void print_data(int arr[], int len, int active, int done, int pauses)
             printf(COLOR_RESET);
         }
     }
-    printf("\n");
+    // draw status
+    if (strcmp(status, "SWAP!") == 0)
+    {
+        printf(COLOR_RED);
+    }
+    else if (strcmp(status, "OK!") == 0)
+    {
+        printf(COLOR_GREEN);
+    }
+    printf("\n %s\n", status);
+    printf(COLOR_RESET);
+    
+    // wait
     delay(PAUSE_DUR * pauses);
 }
