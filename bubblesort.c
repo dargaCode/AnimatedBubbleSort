@@ -20,7 +20,7 @@ void delay(int milliseconds);
 #define COLOR_RESET   "\x1b[0m"
 
 // constant
-#define PAUSE_DUR 500
+#define PAUSE_DUR 400
 
 int main(int argc, string argv[])
 {       
@@ -100,8 +100,8 @@ void sort_array(int arr[], int len)
         int confirmed = i;
         
         //draw the results of the previous pass
-        print_data(arr, len, -10, confirmed, 4);
-        
+        print_data(arr, len, -10, confirmed, 2);
+                        
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
         
@@ -127,7 +127,7 @@ void sort_array(int arr[], int len)
     // draw the final results
     print_data(arr, len, -10, 0, 1);
     printf(COLOR_GREEN);
-    printf("\n DONE! \n");
+    printf("DONE! \n\n");
     printf(COLOR_RESET);
 }
 
@@ -154,9 +154,8 @@ void delay(int milliseconds)
  */
 void print_data(int arr[], int len, int active, int done, int pauses)
 {
-    // clear line
-    //printf("\r");
-    //fflush(stdout);
+    // empty the screen
+    system("clear");
     
     // loop one higher than normal, to add ) after last
     for (int i = 0; i <= len; i++)
