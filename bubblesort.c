@@ -35,7 +35,7 @@ int main(int argc, string argv[])
     if (validate(argc, argv) == false)
     {
         printf(COLOR_RED);
-        printf("Usage: bubblesort <length 1 - 100> <delay 10 - 1000>\n");
+        printf("Usage: bubblesort <length 2 - 100> <delay 5 - 1000>\n");
         printf(COLOR_RESET);
         return 1;
     }
@@ -67,16 +67,16 @@ bool validate(int argc, string argv[])
     }
 
     int len = atoi(argv[1]);
-    // array length must be positive int 1 - 100
-    if (len < 1 || len > 100)
+    // array length must be positive int 2 - 100
+    if (len < 2 || len > 100)
     {
         valid = false;
         return valid;
     }
 
     int delay = atoi(argv[2]);
-    // delay ms must be positive int 10 - 1000
-    if (delay < 10 || delay > 1000)
+    // delay ms must be positive int 5 - 1000
+    if (delay < 5 || delay > 1000)
     {
         valid = false;
         return valid;
@@ -144,8 +144,10 @@ void sort_array(int arr[], int len, int wait_ms)
             }
         }
     }
+    // draw all values green
+    print_data(arr, len, -10, len, "", wait_ms * 1.5);
     // draw the final results
-    print_data(arr, len, -10, 0, STR_END, wait_ms);
+    print_data(arr, len, -10, 0, STR_END, wait_ms * 0.5);
 }
 
 /*
