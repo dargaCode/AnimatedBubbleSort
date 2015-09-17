@@ -143,24 +143,6 @@ void sort_array(int arr[], int len, int wait_ms)
 }
 
 /*
- * Delay for a given amount of milliseconds
- */
-void delay(int milliseconds)
-{
-    // type "clock_t" is ticks
-    clock_t start = clock();
-    clock_t now = clock();
-    long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
-    
-    // still waiting
-    while (now < start + delay)
-    {
-        // update the current time
-        now = clock();
-    }
-}
-
-/*
  * Print out all the elements in the array
  */
 void print_data(int arr[], int len, int active, int done, string status, int wait_ms)
@@ -273,4 +255,22 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
     printf("\n");
     // wait
     delay(wait_ms);
+}
+
+/*
+ * Delay for a given amount of milliseconds
+ */
+void delay(int milliseconds)
+{
+    // type "clock_t" is ticks
+    clock_t start = clock();
+    clock_t now = clock();
+    long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
+    
+    // still waiting
+    while (now < start + delay)
+    {
+        // update the current time
+        now = clock();
+    }
 }
