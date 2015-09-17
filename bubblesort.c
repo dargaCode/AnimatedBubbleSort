@@ -125,7 +125,7 @@ void sort_array(int arr[], int len)
             else
             {
                 // draw the unswapped results
-                print_data(arr, len, j, confirmed, "OK!", 1);
+                print_data(arr, len, j, confirmed, " OK!", 1);
             }
         }
     }
@@ -163,14 +163,14 @@ void print_data(int arr[], int len, int active, int done, string status, int pau
     for (int i = 0; i <= len; i++)
     {
         int relative_pos = i - active;
-        printf(COLOR_GREEN);
+        // figure out how to prefix the value
         switch (relative_pos)
         {
             // highlight the current values being compared
             case 0:
                 printf(COLOR_CYAN);
                 printf("(");
-                printf(COLOR_YELLOW);
+                printf(COLOR_RESET);
                 break;
             case 1:
                 // draw the comparison
@@ -186,6 +186,7 @@ void print_data(int arr[], int len, int active, int done, string status, int pau
                     printf("<");
                     printf(COLOR_RESET);
                 }
+                // values must be equal
                 else
                 {
                     printf(COLOR_GREEN);
@@ -198,12 +199,12 @@ void print_data(int arr[], int len, int active, int done, string status, int pau
                 printf(")");
                 printf(COLOR_RESET);
                 break;
+            // when not active comparison, just leave a space
             default:
                 printf(" ");
                 break;
         }
-        printf(COLOR_RESET);
-        // leave off the last number
+        // leave off the last number [so ) can end the line]
         if (i < len)
         {
             // green for values guaranteed done
@@ -211,23 +212,31 @@ void print_data(int arr[], int len, int active, int done, string status, int pau
             {
                 printf(COLOR_GREEN);
             }
-            // actually print the current value
+            // finally print the current value
             printf("%i", arr[i]);
             printf(COLOR_RESET);
         }
     }
-    // draw status
-    if (strcmp(status, "SWAP!") == 0)
+    // draw status in the correct color
+    if (strcmp(status, "BEGIN") == 0)
     {
-        printf(COLOR_RED);
+        printf(COLOR_YELLOW);
     }
-    else if (strcmp(status, "OK!") == 0)
+    else if (strcmp(status, " OK!") == 0 || strcmp(status, "DONE") == 0)
     {
         printf(COLOR_GREEN);
     }
-    printf("\n %s\n", status);
+    else if (strcmp(status, "SWAP!") == 0)
+    {
+        printf(COLOR_RED);
+    }
+    else
+    {
+        printf(COLOR_RESET);
+    }
+    printf("\n  %s", status);
     printf(COLOR_RESET);
-    
+    printf("\n");
     // wait
     delay(PAUSE_DUR * pauses);
 }
