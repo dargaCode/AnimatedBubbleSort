@@ -20,6 +20,12 @@ void delay(int milliseconds);
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RESET   "\x1b[0m"
 
+// strings
+#define STR_START   "START"
+#define STR_SWAP    "SWAP!"
+#define STR_NO_SWAP " OK!"
+#define STR_END     "DONE"
+
 // constant
 #define MIN_WAIT_FOR_VERBOSE 125;
 
@@ -101,7 +107,7 @@ void fill_array(int arr[], int len)
 void sort_array(int arr[], int len, int wait_ms)
 {
     //draw the unsorted values
-    print_data(arr, len, -10, 0, "BEGIN", wait_ms);
+    print_data(arr, len, -10, 0, STR_START, wait_ms);
 
     // main passes through the array
     for (int i = 0; i < len - 1; i++)
@@ -129,17 +135,17 @@ void sort_array(int arr[], int len, int wait_ms)
                 arr[j + 1] = temp;
 
                 // draw the swapped results
-                print_data(arr, len, j, confirmed, "SWAP!", wait_ms);
+                print_data(arr, len, j, confirmed, STR_SWAP, wait_ms);
             }
             else
             {
                 // draw the unswapped results
-                print_data(arr, len, j, confirmed, " OK!", wait_ms);
+                print_data(arr, len, j, confirmed, STR_NO_SWAP, wait_ms);
             }
         }
     }
     // draw the final results
-    print_data(arr, len, -10, 0, "DONE", wait_ms);
+    print_data(arr, len, -10, 0, STR_END, wait_ms);
 }
 
 /*
@@ -227,15 +233,15 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
         }
     }
     // draw status in the correct color
-    if (strcmp(status, "BEGIN") == 0)
+    if (strcmp(status, STR_START) == 0)
     {
         printf(COLOR_YELLOW);
     }
-    else if (strcmp(status, " OK!") == 0 || strcmp(status, "DONE") == 0)
+    else if (strcmp(status, STR_NO_SWAP) == 0 || strcmp(status, STR_END) == 0)
     {
         printf(COLOR_GREEN);
     }
-    else if (strcmp(status, "SWAP!") == 0)
+    else if (strcmp(status, STR_SWAP) == 0)
     {
         printf(COLOR_RED);
     }
@@ -244,7 +250,7 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
         printf(COLOR_RESET);
     }
     // status disabled at high speeds except for "done"
-    if (!verbose && strcmp(status, "DONE") != 0)
+    if (!verbose && strcmp(status, STR_END) != 0)
     {
         status = "";
         printf(COLOR_RESET);
