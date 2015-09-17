@@ -20,6 +20,9 @@ void delay(int milliseconds);
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RESET   "\x1b[0m"
 
+// constant
+#define MIN_WAIT_FOR_VERBOSE 125;
+
 int main(int argc, string argv[])
 {       
     // failure
@@ -165,51 +168,64 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
     // empty the screen
     system("clear");
     
+    bool verbose = wait_ms >= MIN_WAIT_FOR_VERBOSE;
+        
     // loop one higher than normal, to add ) after last
     for (int i = 0; i <= len; i++)
     {
+        // position used for bracketing etc
         int relative_pos = i - active;
-        // figure out how to prefix the value
-        switch (relative_pos)
+
+        // comparison graphics disabled at fast speeds
+        if (verbose)
         {
-            // highlight the current values being compared
-            case 0:
-                printf(COLOR_CYAN);
-                printf("(");
-                printf(COLOR_RESET);
-                break;
-            case 1:
-                // draw the comparison
-                if (arr[active] > arr[active + 1])
-                {
-                    printf(COLOR_RED);
-                    printf(">");
+            // figure out how to prefix the value
+            switch (relative_pos)
+            {
+                // highlight the current values being compared
+                case 0:
+                    printf(COLOR_CYAN);
+                    printf("(");
                     printf(COLOR_RESET);
-                }
-                else if (arr[active] < arr[active + 1])
-                {
-                    printf(COLOR_GREEN);
-                    printf("<");
+                    break;
+                case 1:
+                    // draw the comparison
+                    if (arr[active] > arr[active + 1])
+                    {
+                        printf(COLOR_RED);
+                        printf(">");
+                        printf(COLOR_RESET);
+                    }
+                    else if (arr[active] < arr[active + 1])
+                    {
+                        printf(COLOR_GREEN);
+                        printf("<");
+                        printf(COLOR_RESET);
+                    }
+                    // values must be equal
+                    else
+                    {
+                        printf(COLOR_GREEN);
+                        printf("=");
+                        printf(COLOR_RESET);
+                    }
+                    break;
+                case 2:
+                    printf(COLOR_CYAN);
+                    printf(")");
                     printf(COLOR_RESET);
-                }
-                // values must be equal
-                else
-                {
-                    printf(COLOR_GREEN);
-                    printf("=");
-                    printf(COLOR_RESET);
-                }
-                break;
-            case 2:
-                printf(COLOR_CYAN);
-                printf(")");
-                printf(COLOR_RESET);
-                break;
-            // when not active comparison, just leave a space
-            default:
-                printf(" ");
-                break;
+                    break;
+                // when not active comparison, just leave a space
+                default:
+                    printf(" ");
+                    break;
+            }
         }
+        // not verbose, all values preceeded with spaces
+        else
+        {
+            printf(" ");
+        }    
         // leave off the last number [so ) can end the line]
         if (i < len)
         {
@@ -217,6 +233,11 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
             if (i >= len - done)
             {
                 printf(COLOR_GREEN);
+            }
+            // yellow for current comparison
+            if (!verbose && (relative_pos == 0 || relative_pos == 1))
+            {
+                printf(COLOR_MAGENTA);
             }
             // finally print the current value
             printf("%i", arr[i]);
@@ -240,6 +261,13 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
     {
         printf(COLOR_RESET);
     }
+    // status disabled at high speeds except for "done"
+    if (!verbose && strcmp(status, "DONE") != 0)
+    {
+        status = "";
+        printf(COLOR_RESET);    
+    }
+    
     printf("\n  %s", status);
     printf(COLOR_RESET);
     printf("\n");
