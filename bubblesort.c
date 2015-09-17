@@ -7,8 +7,8 @@
 // prototypes
 bool validate(int argc, string argv[]);
 void fill_array(int arr[], int len);
-void sort_array(int arr[], int len);
-void print_data(int arr[], int len, int active, int done, string status, int pauses);
+void sort_array(int arr[], int len, int wait_ms);
+void print_data(int arr[], int len, int active, int done, string status, int wait_ms);
 void delay(int milliseconds);
 
 // printf ANSI colors
@@ -20,23 +20,24 @@ void delay(int milliseconds);
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RESET   "\x1b[0m"
 
-// constant
-#define PAUSE_DUR 500
-
 int main(int argc, string argv[])
 {       
     // failure
     if (validate(argc, argv) == false)
     {
+        printf(COLOR_RED);
+        printf("Usage: bubblesort <length 1 - 100> <delay 10 - 1000>\n");
+        printf(COLOR_RESET);
         return 1;
     }
 
     // create array
     int data_len = atoi(argv[1]);
-    int data[data_len]; 
+    int data[data_len];
+    int wait_ms = atoi(argv[2]);
         
     fill_array(data, data_len);
-    sort_array(data, data_len);
+    sort_array(data, data_len, wait_ms);
     
     // success
     return 0;
@@ -50,24 +51,29 @@ bool validate(int argc, string argv[])
     bool valid = true;
 
     // accept exactly one argument
-    if (argc != 2)
+    if (argc != 3)
     {
         valid = false;
+        return valid;
     }
     
     int len = atoi(argv[1]);
-    // argument must be positive int up to 200
-    if (len < 1 || len > 200)
+    // array length must be positive int 1 - 100
+    if (len < 1 || len > 100)
     {
         valid = false;
+        return valid;
     }
     
-    if (valid == false)
+    int delay = atoi(argv[2]);
+    // delay ms must be positive int 10 - 1000
+    if (delay < 10 || delay > 1000)
     {
-        printf(COLOR_RED);
-        printf("Usage: bubblesort <array length 1 - 200>\n");
-        printf(COLOR_RESET);
+        valid = false;
+        return valid;
     }
+    
+    // success
     return valid;
 }
 
@@ -89,10 +95,10 @@ void fill_array(int arr[], int len)
 /*
  * Sort the array
  */
-void sort_array(int arr[], int len)
+void sort_array(int arr[], int len, int wait_ms)
 {   
     //draw the unsorted values
-    print_data(arr, len, -10, 0, "BEGIN", 1);    
+    print_data(arr, len, -10, 0, "BEGIN", wait_ms);    
     
     // main passes through the array
     for (int i = 0; i < len - 1; i++)
@@ -101,7 +107,7 @@ void sort_array(int arr[], int len)
         int confirmed = i;
         
         //draw the results of the previous pass
-        print_data(arr, len, -10, confirmed, "", 2);
+        print_data(arr, len, -10, confirmed, "", wait_ms * 2);
                         
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
@@ -110,7 +116,7 @@ void sort_array(int arr[], int len)
         for (int j = 0; j < max; j++)
         {
             // draw the numbers being compared
-            print_data(arr, len, j, confirmed, "", 1);
+            print_data(arr, len, j, confirmed, "", wait_ms);
 
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
@@ -120,17 +126,17 @@ void sort_array(int arr[], int len)
                 arr[j + 1] = temp;
                 
                 // draw the swapped results
-                print_data(arr, len, j, confirmed, "SWAP!",1);
+                print_data(arr, len, j, confirmed, "SWAP!", wait_ms);
             }
             else
             {
                 // draw the unswapped results
-                print_data(arr, len, j, confirmed, " OK!", 1);
+                print_data(arr, len, j, confirmed, " OK!", wait_ms);
             }
         }
     }
     // draw the final results
-    print_data(arr, len, -10, 0, "DONE", 1);
+    print_data(arr, len, -10, 0, "DONE", wait_ms);
 }
 
 /*
@@ -154,7 +160,7 @@ void delay(int milliseconds)
 /*
  * Print out all the elements in the array
  */
-void print_data(int arr[], int len, int active, int done, string status, int pauses)
+void print_data(int arr[], int len, int active, int done, string status, int wait_ms)
 {
     // empty the screen
     system("clear");
@@ -238,5 +244,5 @@ void print_data(int arr[], int len, int active, int done, string status, int pau
     printf(COLOR_RESET);
     printf("\n");
     // wait
-    delay(PAUSE_DUR * pauses);
+    delay(wait_ms);
 }
