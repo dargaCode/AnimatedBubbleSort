@@ -24,7 +24,7 @@ void delay(int milliseconds);
 #define MIN_WAIT_FOR_VERBOSE 125;
 
 int main(int argc, string argv[])
-{       
+{
     // failure
     if (validate(argc, argv) == false)
     {
@@ -38,10 +38,10 @@ int main(int argc, string argv[])
     int data_len = atoi(argv[1]);
     int data[data_len];
     int wait_ms = atoi(argv[2]);
-        
+
     fill_array(data, data_len);
     sort_array(data, data_len, wait_ms);
-    
+
     // success
     return 0;
 }
@@ -59,7 +59,7 @@ bool validate(int argc, string argv[])
         valid = false;
         return valid;
     }
-    
+
     int len = atoi(argv[1]);
     // array length must be positive int 1 - 100
     if (len < 1 || len > 100)
@@ -67,7 +67,7 @@ bool validate(int argc, string argv[])
         valid = false;
         return valid;
     }
-    
+
     int delay = atoi(argv[2]);
     // delay ms must be positive int 10 - 1000
     if (delay < 10 || delay > 1000)
@@ -75,23 +75,23 @@ bool validate(int argc, string argv[])
         valid = false;
         return valid;
     }
-    
+
     // success
     return valid;
 }
 
 /*
- * Fill the array with random ints 
- */ 
+ * Fill the array with random ints
+ */
 void fill_array(int arr[], int len)
 {
     // random seed based on current time
-    srand(time(NULL));   
-    
+    srand(time(NULL));
+
     for (int i = 0; i < len; i++)
     {
         // len * 5 reduces duplicate numbers
-        arr[i] = rand() % (len * 5);      
+        arr[i] = rand() % (len * 5);
     }
 }
 
@@ -99,22 +99,22 @@ void fill_array(int arr[], int len)
  * Sort the array
  */
 void sort_array(int arr[], int len, int wait_ms)
-{   
+{
     //draw the unsorted values
-    print_data(arr, len, -10, 0, "BEGIN", wait_ms);    
-    
+    print_data(arr, len, -10, 0, "BEGIN", wait_ms);
+
     // main passes through the array
     for (int i = 0; i < len - 1; i++)
-    {      
+    {
         // items that must be correct this pass
         int confirmed = i;
-        
+
         //draw the results of the previous pass
         print_data(arr, len, -10, confirmed, "", wait_ms * 2);
-                        
+
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
-        
+
         // compare each unconfirmed pair
         for (int j = 0; j < max; j++)
         {
@@ -127,7 +127,7 @@ void sort_array(int arr[], int len, int wait_ms)
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
-                
+
                 // draw the swapped results
                 print_data(arr, len, j, confirmed, "SWAP!", wait_ms);
             }
@@ -149,9 +149,9 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
 {
     // empty the screen
     system("clear");
-    
+
     bool verbose = wait_ms >= MIN_WAIT_FOR_VERBOSE;
-        
+
     // loop one higher than normal, to add ) after last
     for (int i = 0; i <= len; i++)
     {
@@ -207,7 +207,7 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
         else
         {
             printf(" ");
-        }    
+        }
         // leave off the last number [so ) can end the line]
         if (i < len)
         {
@@ -247,9 +247,9 @@ void print_data(int arr[], int len, int active, int done, string status, int wai
     if (!verbose && strcmp(status, "DONE") != 0)
     {
         status = "";
-        printf(COLOR_RESET);    
+        printf(COLOR_RESET);
     }
-    
+
     printf("\n  %s", status);
     printf(COLOR_RESET);
     printf("\n");
@@ -266,7 +266,7 @@ void delay(int milliseconds)
     clock_t start = clock();
     clock_t now = clock();
     long delay = milliseconds * (CLOCKS_PER_SEC / 1000);
-    
+
     // still waiting
     while (now < start + delay)
     {
