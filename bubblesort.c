@@ -121,6 +121,8 @@ void sort_array(int arr[], int len, int wait_ms)
         // don't loop through any confirmed values
         int max = len - confirmed - 1;
 
+        int swap_count = 0;
+
         // compare each unconfirmed pair
         for (int j = 0; j < max; j++)
         {
@@ -130,6 +132,8 @@ void sort_array(int arr[], int len, int wait_ms)
             // compare each number and swap if neccesary
             if (arr[j + 1] < arr[j])
             {
+                swap_count++;
+
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
@@ -142,6 +146,12 @@ void sort_array(int arr[], int len, int wait_ms)
                 // draw the unswapped results
                 print_data(arr, len, j, confirmed, STR_NO_SWAP, wait_ms);
             }
+        }
+
+        // check if the program can end early
+        if (swap_count == 0)
+        {
+            break;
         }
     }
     // draw all values green
