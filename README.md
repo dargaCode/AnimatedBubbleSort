@@ -7,4 +7,4 @@ Rendering behavior changes to be less detailed for delays below 150 ms.
 
 Not a very difficult algorithm to implement, but actually presenting and animating everything turned out to take a few days!
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/q_wTVAHAGts" frameborder="0" allowfullscreen></iframe>
+<h3><a href="https://youtu.be/q_wTVAHAGts">Youtube Video</a></h3>
